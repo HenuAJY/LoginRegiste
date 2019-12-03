@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity_foget2">
+
+    <AbsoluteLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_x="20dp"
+            android:layout_y="20dp"
+
+
+            />
+
+        <EditText
+            android:id="@+id/ed1"
+            android:layout_height="wrap_content"
+            android:layout_width="285dp"
+            android:layout_x="0dp"
+            android:layout_y="90dp"
+            android:hint="请输入验证码"
+            />
+
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="300dp"
+            android:layout_y="90dp"
+            android:text="获取验证码"
+            />
+
+        <EditText
+            android:id="@+id/ed2"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_x="0dp"
+            android:layout_y="180dp"
+            android:hint="请输入新的密码"
+            android:inputType="textPassword"
+            />
+
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_x="0dp"
+            android:layout_y="250dp"
+            android:text="确定"
+            android:background="@drawable/bt_shape"
+            android:textColor="#ffffffff"
+            />
+    </AbsoluteLayout>
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.loginregiste">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <service
+            android:name="com.example.creationclientdebug.service.HeartBeatService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name="com.example.creationclientdebug.activity.MainApp">
+
+        </activity>
+        <activity android:name="com.example.creationclientdebug.activity.GroupInfoActivity" />
+        <activity android:name="com.example.creationclientdebug.activity.GroupApplyActivity" />
+        <activity android:name="com.example.creationclientdebug.activity.ApplyInfoActivity" />
+        <activity android:name=".GroupMessage" />
+        <activity android:name=".activity_group" />
+        <activity android:name=".activity_create" />
+        <activity android:name=".Tab02Activity" />
+        <activity android:name=".activity_search" />
+        <activity
+            android:name=".MainActivity"
+            android:label="签到群" />
+        <activity
+            android:name=".activity_foget2"
+            android:label="找回密码" />
+        <activity
+            android:name=".acticity_forget"
+            android:label="忘记密码" />
+        <activity
+            android:name=".activity_register"
+            android:label="用户注册" />
+        <activity android:name=".activity_login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
