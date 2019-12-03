@@ -32,7 +32,8 @@ public class ApplyInfoActivity extends AppCompatActivity {
     private User applyer;
     private Group group;
 
-    private TextView tApplyInfo,tGroupInfo;
+    private TextView tUserAccount,tUserName,tUserUniversity,tUserCollege,tUserMayjor,tUserPhone,tUserEmail;
+    private TextView tGroupId,tGroupName,tGroupOwner;
     private Button bReject,bAgree;
 
     private Listener listener = new Listener();
@@ -43,25 +44,45 @@ public class ApplyInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apply_info);
 
-        tApplyInfo = findViewById(R.id.TApplyInfo);
-        tGroupInfo = findViewById(R.id.TGroupInfo);
-
         bReject = findViewById(R.id.BRejectApply);
         bReject.setOnClickListener(listener);
 
         bAgree = findViewById(R.id.BAgree);
         bAgree.setOnClickListener(listener);
 
-        init();
-
+        initView();
+        initData();
     }
 
-    public void init(){
+    public void initView(){
+        tUserAccount = findViewById(R.id.tv_user_account);
+        tUserName = findViewById(R.id.tv_user_name);
+        tUserUniversity = findViewById(R.id.tv_user_university);
+        tUserCollege = findViewById(R.id.tv_user_college);
+        tUserMayjor = findViewById(R.id.tv_user_mayjor);
+        tUserPhone = findViewById(R.id.tv_user_phone);
+        tUserEmail = findViewById(R.id.tv_user_email);
+
+        tGroupId = findViewById(R.id.tv_group_id);
+        tGroupName = findViewById(R.id.tv_group_name);
+        tGroupOwner = findViewById(R.id.tv_group_owner);
+    }
+
+    public void initData(){
         applyer = data.getUser();
         group = data.getGroup();
 
-        tApplyInfo.setText(applyer.toString());
-        tGroupInfo.setText(group.toString());
+        tUserAccount.setText("账号:"+applyer.getAccount());
+        tUserName.setText("姓名:"+applyer.getName());
+        tUserUniversity.setText("学校:"+applyer.getUniversity());
+        tUserCollege.setText("学院:"+applyer.getCollege());
+        tUserMayjor.setText("专业:"+applyer.getMayjor());
+        tUserPhone.setText("手机号:"+applyer.getPhone());
+        tUserEmail.setText("邮箱:"+applyer.getEmail());
+
+        tGroupId.setText("群号:"+group.getId());
+        tGroupName.setText("群名称:"+group.getName());
+        tGroupOwner.setText("群主:"+group.getCreator());
     }
 
     class Listener implements View.OnClickListener{

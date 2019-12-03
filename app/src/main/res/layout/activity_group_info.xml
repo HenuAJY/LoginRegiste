@@ -19,13 +19,46 @@
             android:layout_height="1dp"
             android:layout_marginVertical="4dp"
             android:background="#000"/>
-        <TextView
-            android:id="@+id/TGroupInfo"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:textSize="20dp"
-            android:layout_weight="1"/>
-
+            android:layout_weight="1"
+            android:orientation="vertical">
+    <!--        群基本信息-->
+    <!--        群名称-->
+            <TextView
+                android:id="@+id/tv_group_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="#000"/>
+    <!--        群号-->
+            <TextView
+                android:id="@+id/tv_group_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="#000"/>
+    <!--        群主-->
+            <TextView
+                android:id="@+id/tv_group_owner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="#000"/>
+        </LinearLayout>
 <!--        若是搜索群的信息，则显示申请加入按钮-->
         <Button
             android:visibility="gone"

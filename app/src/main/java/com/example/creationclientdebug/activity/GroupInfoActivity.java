@@ -34,7 +34,7 @@ public class GroupInfoActivity extends AppCompatActivity {
     private Group group;
     private User user;
 
-    private TextView tGroupInfo;
+    private TextView tGroupName,tGroupId,tGroupOwner;
 
     private Button bSendApply;
 
@@ -61,7 +61,9 @@ public class GroupInfoActivity extends AppCompatActivity {
     }
 
     private void initControl(){
-        tGroupInfo = findViewById(R.id.TGroupInfo);
+        tGroupName = findViewById(R.id.tv_group_name);
+        tGroupId = findViewById(R.id.tv_group_id);
+        tGroupOwner = findViewById(R.id.tv_group_owner);
         bSendApply = findViewById(R.id.BSendApply);
         bSendApply.setOnClickListener(view -> {
             new Thread(()->{
@@ -83,7 +85,10 @@ public class GroupInfoActivity extends AppCompatActivity {
         sb.append("群名称：").append(group.getName());
         sb.append("群号：").append(group.getId());
         sb.append("群主：").append(group.getCreator());
-        tGroupInfo.setText(sb.toString());
+        //tGroupInfo.setText(sb.toString());
+        tGroupName.setText("群名称:"+group.getName());
+        tGroupId.setText("群号:"+group.getId());
+        tGroupOwner.setText("群主:"+group.getCreator());
     }
 
     private void updateView(){
