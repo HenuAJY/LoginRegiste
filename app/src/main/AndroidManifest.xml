@@ -11,15 +11,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name="com.example.creationclientdebug.activity.SigninActivity"></activity>
 
         <service
             android:name="com.example.creationclientdebug.service.HeartBeatService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name="com.example.creationclientdebug.activity.MainApp">
-
-        </activity>
+        <activity android:name="com.example.creationclientdebug.activity.MainApp"></activity>
         <activity android:name="com.example.creationclientdebug.activity.GroupInfoActivity" />
         <activity android:name="com.example.creationclientdebug.activity.GroupApplyActivity" />
         <activity android:name="com.example.creationclientdebug.activity.ApplyInfoActivity" />
