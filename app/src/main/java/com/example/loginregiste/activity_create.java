@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.creationclientdebug.activity.GroupInfoActivity;
+import com.example.creationclientdebug.fragment.GroupFragment;
+import com.example.debug.ToastUtil;
 import com.henu.entity.Group;
 import com.henu.poxy.GroupServicePoxy;
 import com.henu.service.GroupService;
@@ -51,13 +54,18 @@ public class activity_create extends AppCompatActivity implements View.OnClickLi
                         GroupService groupService = GroupServicePoxy.getInstance();
                         Group group = groupService.setGroup(phoneNum,group_name.getText().toString().trim());
                         if(group!=null){
-                            Intent intent = new Intent(activity_create.this,activity_group.class);
-                            intent.putExtra("group",group);
-                            startActivity(intent);
+//                            Intent intent = new Intent(activity_create.this,activity_group.class);
+//                            intent.putExtra("group",group);
+//                            startActivity(intent);
+                            runOnUiThread(()->{
+                                ToastUtil.Toast(activity_create.this,"创建成功！");
+                            });
+
+                            GroupFragment.getInstance().updateList(group,0);
+                            finish();
                         }else{
                             runOnUiThread(() -> {
                                 Toast.makeText(activity_create.this,"创建失败，请重新设置！",Toast.LENGTH_LONG).show();
-                                group_name.setText("");
                             });
 
                         }

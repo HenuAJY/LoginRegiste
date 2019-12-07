@@ -46,7 +46,7 @@ public class GroupInfoActivity extends AppCompatActivity {
 
     private Button bViewSigninInfo;
 
-
+    private MyButtonClickListener btnListener = new MyButtonClickListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,19 +65,14 @@ public class GroupInfoActivity extends AppCompatActivity {
         tGroupId = findViewById(R.id.tv_group_id);
         tGroupOwner = findViewById(R.id.tv_group_owner);
         bSendApply = findViewById(R.id.BSendApply);
-        bSendApply.setOnClickListener(view -> {
-            new Thread(()->{
-                GroupService service = GroupServicePoxy.getInstance();
-                service.sendJoinGroup(user.getAccount(),group.getId());
-            }).start();
-            ToastUtil.Toast(this,"已发送申请，请耐心等候！");
-            finish();
-        });
-
+        bSendApply.setOnClickListener(btnListener);
         lineCreatedPan = findViewById(R.id.layer_created);
         bLaunchSignin = findViewById(R.id.btn_launch_signin);
+        bLaunchSignin.setOnClickListener(btnListener);
         bViewMember = findViewById(R.id.btn_view_member);
+        bViewMember.setOnClickListener(btnListener);
         bViewSigninInfo = findViewById(R.id.btn_view_my_signin_info);
+        bViewSigninInfo.setOnClickListener(btnListener);
     }
 
     private void showGroupInfo(){
@@ -104,6 +99,26 @@ public class GroupInfoActivity extends AppCompatActivity {
             case SEARCHED_GROUP://查看的是搜索的群
                 bSendApply.setVisibility(View.VISIBLE);
                 break;
+        }
+    }
+
+    class MyButtonClickListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.btn_launch_signin:
+                    SigninActivity.startActivity(GroupInfoActivity.this,user,group);
+                    break;
+                case R.id.BSendApply:
+                    new Thread(()->{
+                        GroupService service = GroupServicePoxy.getInstance();
+                        service.sendJoinGroup(user.getAccount(),group.getId());
+                    }).start();
+                    ToastUtil.Toast(GroupInfoActivity.this,"已发送申请，请耐心等候！");
+                    finish();
+                    break;
+            }
         }
     }
 }

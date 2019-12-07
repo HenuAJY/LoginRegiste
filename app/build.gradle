@@ -23,6 +23,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    sourceSets {
+        main{
+            jniLibs.srcDir 'libs'
+        }
+    }
 }
 // 在MobSDK的扩展中注册SMSSDK的相关信息
 MobSDK {

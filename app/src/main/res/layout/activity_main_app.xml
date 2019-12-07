@@ -19,8 +19,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:itemIconTint="@drawable/bottom_selector"
-            app:itemTextColor="@drawable/bottom_selector"
+            android:background="@color/barBg"
+            app:itemIconTint="@drawable/bottom_text_selector"
+            app:itemTextColor="@color/cardview_dark_background"
             app:menu="@menu/bottom_navigation_menu"/>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

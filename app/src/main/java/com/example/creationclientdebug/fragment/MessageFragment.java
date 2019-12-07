@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.creationclientdebug.activity.ApplyInfoActivity;
+import com.example.creationclientdebug.activity.SigninActivity;
 import com.example.creationclientdebug.entity.Message;
 import com.example.loginregiste.R;
 import com.henu.entity.Cmder;
@@ -96,9 +97,9 @@ public class MessageFragment extends Fragment {
                     ApplyInfoActivity.startActivity(getContext(),c);
                     break;
                 case Cmder.GROUPRESPONSE://进入加群回复界面
-
                     break;
-                case Cmder.SIGNIN:
+                case Cmder.SIGNIN://进入签到邀请页面
+                    SigninActivity.startActivity(getContext(),c.getSignin());
                     break;
             }
         }

@@ -40,12 +40,13 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
     public ExpandableListView expandableListView;
     public List<String> allList;
     public List<List<String>>list;
-    public List<Group> listGroups1,listGroups2;
 
     public User user;
     public List<List<Group>> combGroup = new ArrayList<>();//群组对象的二维列表
 
     Button btn_search,btn_create;
+
+    private boolean isFirstLoad = true;
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
@@ -98,23 +99,15 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
                 GroupService groupService = GroupServicePoxy.getInstance();
 
 //                System.out.println(user.getAccount());
-                listGroups1=groupService.getCreatedGroup(user.getAccount());
-                listGroups2=groupService.getJoinedGroup(user.getAccount());
-
-                /*****/
-                combGroup.add(listGroups1);
-                combGroup.add(listGroups2);
-                /*****/
+                List<Group> l1 = groupService.getCreatedGroup(user.getAccount());
+                List<Group> l2 = groupService.getJoinedGroup(user.getAccount());
 
                 mHandler.post(()->{
-                    System.out.println(listGroups1);
-                    initData();
+                    initData(l1,l2);
                 });
         }).start();
         return view;
     }
-
-
 
     private void InitView(View view){
         expandableListView= view.findViewById(R.id.expandableListView);
@@ -135,20 +128,50 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
         allList.add("   我加入的签到群");
 
     }
-    private void initData(){
-        for (Group listGroup1:listGroups1
-        ){
-            String str1=listGroup1.getName();
-            list.get(0).add(str1);
 
+    /**
+     * 向列表中添加群组项
+     * @param group 要添加的群组
+     * @param i 群组类型，0===创建的群组；1===加入的群组
+     */
+    private void addGroup(Group group,int i){
+        if(isFirstLoad){
+            combGroup.add(new ArrayList<>());
+            combGroup.add(new ArrayList<>());
+            isFirstLoad = false;
         }
-        for (Group listGroup2:listGroups2
-        ) {
-            String str2=listGroup2.getName();
-            list.get(1).add(str2);
-        }
+        combGroup.get(i).add(group);//更新数据实体
+        list.get(i).add(group.getName());
         madapder.notifyDataSetChanged();
     }
+
+    public void updateList(Group group,int i){
+        mHandler.post(()->{
+            addGroup(group,i);
+        });
+    }
+
+    private void initData(List<Group> gl1,List<Group> gl2){
+//        for (Group listGroup1:listGroups1
+//        ){
+//            String str1=listGroup1.getName();
+//            list.get(0).add(str1);
+//
+//        }
+//        for (Group listGroup2:listGroups2
+//        ) {
+//            String str2=listGroup2.getName();
+//            list.get(1).add(str2);
+//        }
+//        madapder.notifyDataSetChanged();
+        for (Group g:gl1){
+            addGroup(g,0);
+        }
+        for (Group g:gl2){
+            addGroup(g,1);
+        }
+    }
+
 
 
     //Button
