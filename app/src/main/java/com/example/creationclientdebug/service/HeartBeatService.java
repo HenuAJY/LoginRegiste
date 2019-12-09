@@ -25,9 +25,11 @@ public class HeartBeatService extends Service {
     public static void stopMe(Context context){
         if(heartBeatService!=null){
             context.stopService(heartBeatService);
+            System.out.println("HeartBeatService:stopMe()");
         }
     }
 
+    private boolean isStopHeartBeat = false;
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
@@ -43,7 +45,7 @@ public class HeartBeatService extends Service {
             heartbeat.setAccount(account);
             long startTime = 0;
             int timeout = 10*200;//每两秒发送一次心跳
-            while(true){
+            while(!isStopHeartBeat){
                 long currentTime = System.currentTimeMillis();
                 if(currentTime - startTime>timeout){
                     heartbeat.setTime(currentTime);
@@ -58,6 +60,13 @@ public class HeartBeatService extends Service {
         }).start();
 
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        System.out.println("停止服务");
+        isStopHeartBeat = true;
     }
 
     private void ansyCmder(Cmder cmder){

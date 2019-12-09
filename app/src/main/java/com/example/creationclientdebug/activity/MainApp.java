@@ -96,6 +96,7 @@ public class MainApp extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         unregisterReceiver(receiver);
+        HeartBeatService.stopMe(this);
         super.onDestroy();
     }
 

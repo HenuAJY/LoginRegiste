@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.creationclientdebug.service.HeartBeatService;
 import com.example.loginregiste.R;
 import com.example.loginregiste.activity_login;
 
@@ -48,6 +49,7 @@ public class MyInfoFragment extends Fragment {
             switch (view.getId()){
                 case R.id.btn_log_out:
                     activity_login.startActivity(getContext());
+                    HeartBeatService.stopMe(getContext());
                     getActivity().finish();
                     break;
                 case R.id.btn_view_my_info:
