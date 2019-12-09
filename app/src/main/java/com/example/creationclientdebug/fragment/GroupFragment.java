@@ -40,16 +40,11 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
     public ExpandableListView expandableListView;
     public List<String> allList;
     public List<List<String>>list;
-
     public User user;
     public List<List<Group>> combGroup = new ArrayList<>();//群组对象的二维列表
-
     Button btn_search,btn_create;
-
     private boolean isFirstLoad = true;
-
     private Handler mHandler = new Handler(Looper.getMainLooper());
-
     public static GroupFragment getInstance(){
         if(instance==null){
             instance = new GroupFragment();
@@ -77,9 +72,6 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
         //自定义适配器
         expandableListView.setAdapter(madapder);
         expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
-//                String name = list.get(groupPosition).get(childPosition);
-//                System.out.println(name);
-//                Toast.makeText(MainActivity.this,name,Toast.LENGTH_SHORT).show();
             Group group = combGroup.get(groupPosition).get(childPosition);
             while(user==null);//如果user对象为null，一直等待，知道不为null；
             if(groupPosition==0){
@@ -87,26 +79,43 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
             }else if(groupPosition==1){
                 GroupInfoActivity.startActivity(getContext(),group,user,GroupInfoActivity.JOINED_GROUP);
             }
-
             return true;
         });
-
-        //开一个线程来获取群组对象
-        new Thread(()-> {
-                user = (User)getActivity().getIntent().getSerializableExtra("user");
-//                String phoneNum = "18237760344";//调试*************************************************
-//                System.out.println(phoneNum);
-                GroupService groupService = GroupServicePoxy.getInstance();
-
-//                System.out.println(user.getAccount());
-                List<Group> l1 = groupService.getCreatedGroup(user.getAccount());
-                List<Group> l2 = groupService.getJoinedGroup(user.getAccount());
-
-                mHandler.post(()->{
-                    initData(l1,l2);
-                });
-        }).start();
+        loadGroupList();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println(combGroup);
+        //loadGroupList.start();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //loadGroupList.interrupt();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    /**
+     * 加载群组信息
+     */
+    private void loadGroupList(){
+        new Thread(()-> {
+            user = (User)getActivity().getIntent().getSerializableExtra("user");
+            GroupService groupService = GroupServicePoxy.getInstance();
+            List<Group> l1 = groupService.getCreatedGroup(user.getAccount());
+            List<Group> l2 = groupService.getJoinedGroup(user.getAccount());
+            mHandler.post(()->{
+                initData(l1,l2);
+            });
+        }).start();
     }
 
     private void InitView(View view){
@@ -129,6 +138,7 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
 
     }
 
+
     /**
      * 向列表中添加群组项
      * @param group 要添加的群组
@@ -145,6 +155,11 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
         madapder.notifyDataSetChanged();
     }
 
+    /**
+     * 更新群组数据
+     * @param group
+     * @param i
+     */
     public void updateList(Group group,int i){
         mHandler.post(()->{
             addGroup(group,i);
@@ -152,18 +167,6 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initData(List<Group> gl1,List<Group> gl2){
-//        for (Group listGroup1:listGroups1
-//        ){
-//            String str1=listGroup1.getName();
-//            list.get(0).add(str1);
-//
-//        }
-//        for (Group listGroup2:listGroups2
-//        ) {
-//            String str2=listGroup2.getName();
-//            list.get(1).add(str2);
-//        }
-//        madapder.notifyDataSetChanged();
         for (Group g:gl1){
             addGroup(g,0);
         }

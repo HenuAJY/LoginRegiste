@@ -36,6 +36,7 @@ import com.henu.service.SigninService;
 public class SigninActivity extends AppCompatActivity {
 
     public static void startActivity(Context c, User user, Group group){
+        
         Intent i = new Intent(c,SigninActivity.class);
         i.putExtra("user",user);
         i.putExtra("group",group);
@@ -276,6 +277,7 @@ public class SigninActivity extends AppCompatActivity {
             runOnUiThread(()->{
                 if (res){
                     ToastUtil.Toast(SigninActivity.this,"提交签到成功，请耐心等待签到结果！");
+                    finish();
                 }else{
                     ToastUtil.Toast(SigninActivity.this,"提交签到失败，请重试！");
                 }
@@ -301,6 +303,7 @@ public class SigninActivity extends AppCompatActivity {
             runOnUiThread(()->{
                 if(res){
                     ToastUtil.Toast(SigninActivity.this,"发起成功！");
+                    finish();
                 }else{
                     ToastUtil.Toast(SigninActivity.this,"发起失败！");
                 }

@@ -18,18 +18,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-<!--        添加百度地图开发密钥-->
+        <activity android:name="com.example.creationclientdebug.activity.UserInfoActivity"></activity>
+        <activity android:name="com.example.creationclientdebug.activity.UserChangeInfoActivity" />
+        <activity android:name="com.example.creationclientdebug.activity.MembersActivity" /> <!-- 添加百度地图开发密钥 -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="bPekRwRRVt4W7lltSGxLcVixnon1KYr0"/>
-        <activity android:name="com.example.creationclientdebug.activity.SigninActivity"></activity>
+            android:value="bPekRwRRVt4W7lltSGxLcVixnon1KYr0" />
+
+        <activity android:name="com.example.creationclientdebug.activity.SigninActivity" />
 
         <service
             android:name="com.example.creationclientdebug.service.HeartBeatService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name="com.example.creationclientdebug.activity.MainApp"></activity>
+        <activity android:name="com.example.creationclientdebug.activity.MainApp" />
         <activity android:name="com.example.creationclientdebug.activity.GroupInfoActivity" />
         <activity android:name="com.example.creationclientdebug.activity.GroupApplyActivity" />
         <activity android:name="com.example.creationclientdebug.activity.ApplyInfoActivity" />

@@ -13,5 +13,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/barBg"/>
+        <Button
+            android:id="@+id/btn_view_my_info"
+            android:text="查看个人信息"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/btn_log_out"
+            android:text="退出登录"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </FrameLayout>

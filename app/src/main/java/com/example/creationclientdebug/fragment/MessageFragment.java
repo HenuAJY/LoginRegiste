@@ -17,6 +17,7 @@ import com.example.creationclientdebug.activity.SigninActivity;
 import com.example.creationclientdebug.entity.Message;
 import com.example.loginregiste.R;
 import com.henu.entity.Cmder;
+import com.henu.entity.Group;
 import com.henu.entity.User;
 
 import java.util.ArrayList;
@@ -96,7 +97,9 @@ public class MessageFragment extends Fragment {
                 case Cmder.GROUPAPPLY://进入加群申请详细信息界面
                     ApplyInfoActivity.startActivity(getContext(),c);
                     break;
-                case Cmder.GROUPRESPONSE://进入加群回复界面
+                case Cmder.GROUPRESPONSE://进入加群回复界面，显示群详细信息
+                    Group g = c.getGroup();
+                    System.out.println(g);
                     break;
                 case Cmder.SIGNIN://进入签到邀请页面
                     SigninActivity.startActivity(getContext(),c.getSignin());

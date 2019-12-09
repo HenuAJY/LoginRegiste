@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.creationclientdebug.filter.UserInfoFilter;
 import com.example.debug.ToastUtil;
 import com.example.loginregiste.R;
 import com.henu.entity.Group;
@@ -111,12 +112,18 @@ public class GroupInfoActivity extends AppCompatActivity {
                     SigninActivity.startActivity(GroupInfoActivity.this,user,group);
                     break;
                 case R.id.BSendApply:
-                    new Thread(()->{
-                        GroupService service = GroupServicePoxy.getInstance();
-                        service.sendJoinGroup(user.getAccount(),group.getId());
-                    }).start();
-                    ToastUtil.Toast(GroupInfoActivity.this,"已发送申请，请耐心等候！");
-                    finish();
+                    UserInfoFilter filter = new UserInfoFilter();
+                    if(filter.doFilter(GroupInfoActivity.this,user)){
+                        new Thread(()->{
+                            GroupService service = GroupServicePoxy.getInstance();
+                            service.sendJoinGroup(user.getAccount(),group.getId());
+                        }).start();
+                        ToastUtil.Toast(GroupInfoActivity.this,"已发送申请，请耐心等候！");
+                        finish();
+                    }
+                    break;
+                case R.id.btn_view_member:
+                    MembersActivity.startActivity(GroupInfoActivity.this,group);
                     break;
             }
         }

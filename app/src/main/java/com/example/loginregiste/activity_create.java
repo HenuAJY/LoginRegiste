@@ -54,20 +54,15 @@ public class activity_create extends AppCompatActivity implements View.OnClickLi
                         GroupService groupService = GroupServicePoxy.getInstance();
                         Group group = groupService.setGroup(phoneNum,group_name.getText().toString().trim());
                         if(group!=null){
-//                            Intent intent = new Intent(activity_create.this,activity_group.class);
-//                            intent.putExtra("group",group);
-//                            startActivity(intent);
                             runOnUiThread(()->{
                                 ToastUtil.Toast(activity_create.this,"创建成功！");
                             });
-
                             GroupFragment.getInstance().updateList(group,0);
                             finish();
                         }else{
                             runOnUiThread(() -> {
                                 Toast.makeText(activity_create.this,"创建失败，请重新设置！",Toast.LENGTH_LONG).show();
                             });
-
                         }
                     }).start();
 

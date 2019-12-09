@@ -1,5 +1,6 @@
 package com.example.loginregiste;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,12 @@ import com.henu.types.ReturnType;
 
 
 public class activity_login extends AppCompatActivity implements View.OnClickListener {
+
+    public static void startActivity(Context c){
+        Intent i = new Intent(c,activity_login.class);
+        c.startActivity(i);
+    }
+
     Button btn_registe,btn_forget,btn_Login;
     EditText phoneNum, passWord;
     @Override
@@ -95,6 +102,7 @@ public class activity_login extends AppCompatActivity implements View.OnClickLis
 //            startActivity(i3);
             User u = service.queryByPhone(user.getPhone());
             MainApp.startActivity(this,u);
+            finish();
         }
     }
 }
