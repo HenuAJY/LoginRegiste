@@ -31,7 +31,7 @@ public class UserChangeInfoActivity extends AppCompatActivity implements View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_info);
+        setContentView(R.layout.activity_user_change_info);
         Init();
     }
 
@@ -69,6 +69,7 @@ public class UserChangeInfoActivity extends AppCompatActivity implements View.On
                                         userService.changeInfo(u);
                                         runOnUiThread(()->{
                                             ToastUtil.Toast(UserChangeInfoActivity.this,"保存成功");
+                                            getIntent().putExtra("user",u);//更新Intent中的user数据
                                         });
                                     }catch (Exception e){
                                         runOnUiThread(()->{

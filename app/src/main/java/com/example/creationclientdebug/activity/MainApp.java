@@ -21,6 +21,8 @@ import com.example.creationclientdebug.service.HeartBeatService;
 import com.example.loginregiste.R;
 import com.henu.entity.Cmder;
 import com.henu.entity.User;
+import com.henu.poxy.UserServicePoxy;
+import com.henu.service.UserService;
 
 public class MainApp extends AppCompatActivity {
 
@@ -91,6 +93,19 @@ public class MainApp extends AppCompatActivity {
 
     public void startHeartBeatService(){
         HeartBeatService.startMe(MainApp.this,user.getAccount());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        System.out.println("MainApp:OnResume()");
+//        new Thread(()->{
+//            UserService userService = UserServicePoxy.getInstance();
+//            User u = userService.queryByAccount(user.getAccount());
+//            runOnUiThread(()->{
+//                getIntent().putExtra("user",u);
+//            });
+//        }).start();
     }
 
     @Override

@@ -8,9 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.creationclientdebug.activity.UserInfoActivity;
 import com.example.creationclientdebug.service.HeartBeatService;
 import com.example.loginregiste.R;
 import com.example.loginregiste.activity_login;
+import com.henu.entity.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,9 +30,11 @@ public class MyInfoFragment extends Fragment {
         // Required empty public constructor
     }
 
-    private Button bLogOut;
+    private Button bLogOut,bViewMyInfo;
 
     private MyBtnListener listener = new MyBtnListener();
+
+    private User user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,6 +43,10 @@ public class MyInfoFragment extends Fragment {
         // Inflate the layout for this fragment
         bLogOut = view.findViewById(R.id.btn_log_out);
         bLogOut.setOnClickListener(listener);
+        user = (User)getActivity().getIntent().getSerializableExtra("user");
+
+        bViewMyInfo = view.findViewById(R.id.btn_view_my_info);
+        bViewMyInfo.setOnClickListener(listener);
         return view;
     }
 
@@ -53,6 +61,7 @@ public class MyInfoFragment extends Fragment {
                     getActivity().finish();
                     break;
                 case R.id.btn_view_my_info:
+                    UserInfoActivity.startActivity(getContext(),user);
                     break;
             }
         }
