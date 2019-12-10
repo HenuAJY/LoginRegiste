@@ -99,13 +99,13 @@ public class MainApp extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         System.out.println("MainApp:OnResume()");
-//        new Thread(()->{
-//            UserService userService = UserServicePoxy.getInstance();
-//            User u = userService.queryByAccount(user.getAccount());
-//            runOnUiThread(()->{
-//                getIntent().putExtra("user",u);
-//            });
-//        }).start();
+        new Thread(()->{
+            UserService userService = UserServicePoxy.getInstance();
+            User u = userService.queryByAccount(user.getAccount());
+            runOnUiThread(()->{
+                getIntent().putExtra("user",u);
+            });
+        }).start();
     }
 
     @Override

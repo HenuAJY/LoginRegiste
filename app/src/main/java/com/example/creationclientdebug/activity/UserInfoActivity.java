@@ -32,8 +32,6 @@ public class UserInfoActivity extends AppCompatActivity {
 
     private View.OnClickListener btnListener = new MyBtnListener();
 
-    private AdapterView.OnItemClickListener lvItemListener = new MyLVItemListener();
-
     private ArrayAdapter<String> lvAdapter;
 
     private List<String> userInfo = new ArrayList<>();
@@ -105,17 +103,6 @@ public class UserInfoActivity extends AppCompatActivity {
                     UserChangeInfoActivity.staticActivity(UserInfoActivity.this,user);
                     break;
             }
-        }
-    }
-
-    /**
-     * 列表监听器
-     */
-    class MyLVItemListener implements AdapterView.OnItemClickListener{
-
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
         }
     }
 }
