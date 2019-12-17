@@ -4,24 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.creationclientdebug.activity.MembersActivity">
+    tools:context="com.example.creationclientdebug.activity.SingleSigninInfoActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
         <android.support.v7.widget.Toolbar
-            app:title="群成员"
+            app:title="签到详细信息"
+            android:background="@color/barBg"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/barBg"/>
+            android:layout_height="wrap_content"/>
         <ListView
-            android:id="@+id/lv_members"
+            android:id="@+id/lv_signins"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"/>
         <Button
-            android:id="@+id/btn_export_exl"
-            android:text="导出签到记录到电脑"
+            android:id="@+id/btn_view_on_map"
+            android:text="在地图上查看"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </LinearLayout>

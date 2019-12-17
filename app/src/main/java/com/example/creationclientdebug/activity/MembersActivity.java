@@ -4,15 +4,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
+import com.example.creationclientdebug.utils.ShareUtil;
+import com.example.debug.ToastUtil;
 import com.example.loginregiste.R;
 import com.henu.entity.Group;
 import com.henu.entity.Signin;
 import com.henu.entity.User;
 import com.henu.poxy.GroupServicePoxy;
+import com.henu.poxy.SigninServicePoxy;
 import com.henu.service.GroupService;
+import com.henu.service.SigninService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +50,12 @@ public class MembersActivity extends AppCompatActivity {
 
     private ListView memberStrL;
 
+    private MyLVItemListener lvItemListener = new MyLVItemListener();
+
+    private Button btnExport;
+
+    private SigninService signinService = SigninServicePoxy.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,9 +67,28 @@ public class MembersActivity extends AppCompatActivity {
 
         memberStrL.setAdapter(lAdapter);
 
+        memberStrL.setOnItemClickListener(lvItemListener);
+
         group = (Group)getIntent().getSerializableExtra("group");
 
         loadMembers(group.getId());
+
+        btnExport = findViewById(R.id.btn_export_exl);
+
+        btnExport.setOnClickListener(view -> {
+            new Thread(()->{
+                List<Signin> signins = signinService.getSigninTableByGroupId(group.getId());
+                runOnUiThread(()->{
+                    if (signins.size()==0){
+                        ToastUtil.Toast(MembersActivity.this,"尚无签到记录");
+                    }else{
+                        ShareUtil shareUtil = new ShareUtil();
+                        String tableName = "群-"+group.getId()+"-签到记录.xls";
+                        shareUtil.shareExcel(signins,MembersActivity.this,tableName);
+                    }
+                });
+            }).start();
+        });
     }
 
     /**
@@ -93,5 +125,13 @@ public class MembersActivity extends AppCompatActivity {
      */
     private void updateView(){
         lAdapter.notifyDataSetChanged();
+    }
+
+    class MyLVItemListener implements AdapterView.OnItemClickListener{
+
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            SigninRecodeActivity.startActivity(MembersActivity.this,membersL.get(i).getId(),group.getId());
+        }
     }
 }

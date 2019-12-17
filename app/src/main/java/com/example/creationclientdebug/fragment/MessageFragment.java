@@ -13,6 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.creationclientdebug.activity.ApplyInfoActivity;
+import com.example.creationclientdebug.activity.DeleteGroupApplyActivity;
+import com.example.creationclientdebug.activity.JoinGroupReplayActivity;
 import com.example.creationclientdebug.activity.SigninActivity;
 import com.example.creationclientdebug.entity.Message;
 import com.example.loginregiste.R;
@@ -43,6 +45,7 @@ public class MessageFragment extends Fragment {
         // Required empty public constructor
     }
 
+    private User user;
 
     private ListView msgListView;
     private LinkedList<String> msgList = new LinkedList<>();
@@ -57,6 +60,7 @@ public class MessageFragment extends Fragment {
         msgAdapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_list_item_1,msgList);
         msgListView.setAdapter(msgAdapter);
         msgListView.setOnItemClickListener(new ListItemClickListener());
+        user = (User) getActivity().getIntent().getSerializableExtra("user");
         updateView();
         return view;
     }
@@ -75,6 +79,9 @@ public class MessageFragment extends Fragment {
             case Cmder.SIGNIN:
                 title = "签到邀请";
                 break;
+            case Cmder.GROUPDELETE:
+                title = "群解散通知";
+                break;
                 default:
                     title = "未知消息类型";
         }
@@ -88,6 +95,8 @@ public class MessageFragment extends Fragment {
         }
     }
 
+
+
     class ListItemClickListener implements AdapterView.OnItemClickListener{
 
         @Override
@@ -99,10 +108,14 @@ public class MessageFragment extends Fragment {
                     break;
                 case Cmder.GROUPRESPONSE://进入加群回复界面，显示群详细信息
                     Group g = c.getGroup();
-                    System.out.println(g);
+                    JoinGroupReplayActivity.startActivity(getContext(),c);
                     break;
                 case Cmder.SIGNIN://进入签到邀请页面
-                    SigninActivity.startActivity(getContext(),c.getSignin());
+                    c.getSignin().setReceiver(user.getId());
+                    SigninActivity.startActivity(getContext(),c.getSignin(),SigninActivity.SIGNINIER);
+                    break;
+                case Cmder.GROUPDELETE:
+                    DeleteGroupApplyActivity.startActivity(getContext(),c);
                     break;
             }
         }

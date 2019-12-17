@@ -13,18 +13,22 @@ import android.widget.ListView;
 
 import com.example.loginregiste.R;
 import com.henu.entity.User;
+import com.henu.poxy.UserServicePoxy;
+import com.henu.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserInfoActivity extends AppCompatActivity {
-    public static void startActivity(Context c, User u){
+    public static void startActivity(Context c, String account){
         Intent i = new Intent(c,UserInfoActivity.class);
-        i.putExtra("user",u);
+        i.putExtra("account",account);
         c.startActivity(i);
     }
 
     private User user;
+
+    private String account;
 
     private ListView lvUserInfo;
 
@@ -40,17 +44,26 @@ public class UserInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
-        initial();
+        account = getIntent().getStringExtra("account");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        new Thread(()->{
+            UserService userService = UserServicePoxy.getInstance();
+            user = userService.queryByAccount(account);
+            runOnUiThread(()->initial());
+        }).start();
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        userInfo.clear();
     }
 
     private void initial(){
-        user = (User) getIntent().getSerializableExtra("user");
         String name = "未设置";
         String univer = "未设置";
         String college = "未设置";

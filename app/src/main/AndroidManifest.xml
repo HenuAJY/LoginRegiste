@@ -18,7 +18,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.example.creationclientdebug.activity.UserInfoActivity"></activity>
+        <activity android:name="com.example.creationclientdebug.activity.DeleteGroupApplyActivity"></activity>
+        <activity android:name="com.example.creationclientdebug.activity.JoinGroupReplayActivity" />
+        <activity android:name="com.example.creationclientdebug.activity.SingleSigninInfoActivity" />
+        <activity android:name="com.example.creationclientdebug.activity.SigninRecodeActivity" />
+        <activity android:name="com.example.creationclientdebug.activity.UserInfoActivity" />
         <activity android:name="com.example.creationclientdebug.activity.UserChangeInfoActivity" />
         <activity android:name="com.example.creationclientdebug.activity.MembersActivity" /> <!-- 添加百度地图开发密钥 -->
         <meta-data

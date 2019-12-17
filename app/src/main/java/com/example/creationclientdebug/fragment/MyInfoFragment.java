@@ -61,7 +61,7 @@ public class MyInfoFragment extends Fragment {
                     getActivity().finish();
                     break;
                 case R.id.btn_view_my_info:
-                    UserInfoActivity.startActivity(getContext(),user);
+                    UserInfoActivity.startActivity(getContext(),user.getAccount());
                     break;
             }
         }

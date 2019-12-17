@@ -109,7 +109,7 @@ public class GroupInfoActivity extends AppCompatActivity {
         public void onClick(View view) {
             switch (view.getId()){
                 case R.id.btn_launch_signin:
-                    SigninActivity.startActivity(GroupInfoActivity.this,user,group);
+                    SigninActivity.startActivity(GroupInfoActivity.this,user,group,SigninActivity.LAUNCHER);
                     break;
                 case R.id.BSendApply:
                     UserInfoFilter filter = new UserInfoFilter();
@@ -124,6 +124,9 @@ public class GroupInfoActivity extends AppCompatActivity {
                     break;
                 case R.id.btn_view_member:
                     MembersActivity.startActivity(GroupInfoActivity.this,group);
+                    break;
+                case R.id.btn_view_my_signin_info:
+                    SigninRecodeActivity.startActivity(GroupInfoActivity.this,user.getId(),group.getId());
                     break;
             }
         }

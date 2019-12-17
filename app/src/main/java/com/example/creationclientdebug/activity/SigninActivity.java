@@ -17,6 +17,7 @@ import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
@@ -35,24 +36,25 @@ import com.henu.service.SigninService;
 
 public class SigninActivity extends AppCompatActivity {
 
-    public static void startActivity(Context c, User user, Group group){
+    public static void startActivity(Context c, User user, Group group,int signal){
         
         Intent i = new Intent(c,SigninActivity.class);
         i.putExtra("user",user);
         i.putExtra("group",group);
-        i.putExtra("signal",LAUNCHER);
+        i.putExtra("signal",signal);
         c.startActivity(i);
     }
 
-    public static void startActivity(Context c,Signin signin){
+    public static void startActivity(Context c,Signin signin,int signal){
         Intent i = new Intent(c,SigninActivity.class);
         i.putExtra("signin",signin);
-        i.putExtra("signal",SIGNINIER);
+        i.putExtra("signal",signal);
         c.startActivity(i);
     }
 
     public static final int LAUNCHER = 14345;
     public static final int SIGNINIER = 34645;
+    public static final int LOCATIONVIEWER = 322342;
 
     private Button bLaunchSignin,bSignin,bRejSignin;
 
@@ -88,7 +90,6 @@ public class SigninActivity extends AppCompatActivity {
         mapView = findViewById(R.id.map_view);
         mBaiduMap = mapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);
-        lunchLocation();
 
         user = (User) getIntent().getSerializableExtra("user");
         group = (Group) getIntent().getSerializableExtra("group");
@@ -102,6 +103,7 @@ public class SigninActivity extends AppCompatActivity {
             bLaunchSignin = findViewById(R.id.btn_launch_signin);
             bLaunchSignin.setOnClickListener(btnListener);
             bLaunchSignin.setVisibility(View.VISIBLE);
+            lunchLocation();
         }else if(signal == SIGNINIER){
             bSignin = findViewById(R.id.btn_signin);
             bSignin.setOnClickListener(btnListener);
@@ -110,6 +112,10 @@ public class SigninActivity extends AppCompatActivity {
             bRejSignin = findViewById(R.id.btn_rej_signin);
             bRejSignin.setOnClickListener(btnListener);
             bRejSignin.setVisibility(View.VISIBLE);
+
+            lunchLocation();
+        }else if (signal == LOCATIONVIEWER){
+            addMarker(signinSponser.getLatitude(),signinSponser.getLongtitude());
         }
     }
 
@@ -126,10 +132,15 @@ public class SigninActivity extends AppCompatActivity {
                 .draggable(true)
                 .flat(true)
                 .perspective(true);
+
+
+        MapStatus mStatus = new MapStatus.Builder()
+                .target(point)
+                .zoom(18)
+                .build();
+        MapStatusUpdate update = MapStatusUpdateFactory.newMapStatus(mStatus);
+        mBaiduMap.setMapStatus(update);
         Marker m = (Marker) mBaiduMap.addOverlay(option);
-        Bundle b = new Bundle();
-        b.putInt("listIndex",19878);
-        m.setExtraInfo(b);
     }
 
     /**
@@ -197,7 +208,9 @@ public class SigninActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        mLocationClient.stop();
+        if (mLocationClient!=null){
+            mLocationClient.stop();
+        }
         mBaiduMap.setMyLocationEnabled(false);
         mapView.onDestroy();
         mapView = null;

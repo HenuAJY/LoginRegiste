@@ -1,5 +1,6 @@
 package com.example.creationclientdebug.activity;
 
+import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -95,10 +96,13 @@ public class MainApp extends AppCompatActivity {
         HeartBeatService.startMe(MainApp.this,user.getAccount());
     }
 
+    public void addBadge(){
+
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        System.out.println("MainApp:OnResume()");
         new Thread(()->{
             UserService userService = UserServicePoxy.getInstance();
             User u = userService.queryByAccount(user.getAccount());

@@ -29,7 +29,8 @@
                     android:text="手机号："/>
                 <EditText
                     android:id="@+id/phoneNum"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
+                    android:inputType="number"
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
@@ -43,7 +44,8 @@
                     android:text="密码："/>
                 <EditText
                     android:id="@+id/passWord"
-                    android:layout_width="fill_parent"
+                    android:inputType="textPassword"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
             <LinearLayout

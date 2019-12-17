@@ -57,7 +57,6 @@ public class activity_create extends AppCompatActivity implements View.OnClickLi
                             runOnUiThread(()->{
                                 ToastUtil.Toast(activity_create.this,"创建成功！");
                             });
-                            GroupFragment.getInstance().updateList(group,0);
                             finish();
                         }else{
                             runOnUiThread(() -> {

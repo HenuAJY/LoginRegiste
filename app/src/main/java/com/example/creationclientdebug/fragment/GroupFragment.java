@@ -7,15 +7,19 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.example.creationclientdebug.activity.GroupInfoActivity;
+import com.example.debug.ToastUtil;
 import com.example.loginregiste.MainActivity;
 import com.example.loginregiste.R;
 import com.example.loginregiste.activity_create;
@@ -41,9 +45,8 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
     public List<String> allList;
     public List<List<String>>list;
     public User user;
-    public List<List<Group>> combGroup = new ArrayList<>();//群组对象的二维列表
+    public List<List<Group>> combGroup;//群组对象的二维列表
     Button btn_search,btn_create;
-    private boolean isFirstLoad = true;
     private Handler mHandler = new Handler(Looper.getMainLooper());
     public static GroupFragment getInstance(){
         if(instance==null){
@@ -57,6 +60,11 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
     }
 
     private Context mContext;
+
+    private MyExpandShortClick shortClickListener = new MyExpandShortClick();
+
+    private GroupService groupService = GroupServicePoxy.getInstance();
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -66,42 +74,110 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        System.out.println("onCreateView()");
         View view = inflater.inflate(R.layout.fragment_group, container, false);
         InitView(view);
-        madapder=new Madapder();
-        //自定义适配器
-        expandableListView.setAdapter(madapder);
-        expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
-            Group group = combGroup.get(groupPosition).get(childPosition);
-            while(user==null);//如果user对象为null，一直等待，知道不为null；
-            if(groupPosition==0){
-                GroupInfoActivity.startActivity(getContext(),group,user,GroupInfoActivity.CREATED_GROUP);
-            }else if(groupPosition==1){
-                GroupInfoActivity.startActivity(getContext(),group,user,GroupInfoActivity.JOINED_GROUP);
-            }
-            return true;
-        });
-        loadGroupList();
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        System.out.println(combGroup);
-        //loadGroupList.start();
+        System.out.println("OnResume()");
+        initData();
+        loadGroupList();
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //loadGroupList.interrupt();
+        clearData();
+    }
+
+    private void initData(){
+        combGroup = new ArrayList<>();
+        list = new ArrayList<>();
+        list.add(new ArrayList<>());
+        list.add(new ArrayList<>());
+        madapder=new Madapder();
+        //自定义适配器
+        expandableListView.setAdapter(madapder);
+        expandableListView.setOnChildClickListener(shortClickListener);
+    }
+
+    private void clearData(){
+        combGroup = null;
+        list = null;
+        madapder = null;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
+
+    /********************************************************/
+    int longClickGroupId;
+    int longClickChildId;
+
+    String deleteMenu = "删除";
+    String quitMenu = "退出";
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        ExpandableListView.ExpandableListContextMenuInfo info = (ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
+        int type = ExpandableListView.getPackedPositionType(info.packedPosition);
+        longClickGroupId = ExpandableListView.getPackedPositionGroup(info.packedPosition);
+        longClickChildId = ExpandableListView.getPackedPositionChild(info.packedPosition);
+        if(type == 1 && longClickGroupId == 0){
+            menu.add(deleteMenu);
+        }else if(type == 1 && longClickGroupId == 1){
+            menu.add(quitMenu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        String title = item.getTitle().toString();
+        if (deleteMenu.equals(title)){
+            System.out.println("点击了删除");
+            new Thread(()->{
+                int groupId = this.longClickGroupId;
+                int childId = this.longClickChildId;
+                boolean res = groupService.deleteById(combGroup.get(groupId).get(childId).getId());//进行删除分组操作的结果
+                mHandler.post(()->{
+                    if (res){//删除成功，更新视图
+                        clearData();
+                        initData();
+                        loadGroupList();
+                    }else{//删除失败
+                        ToastUtil.Toast(getContext(),"删除失败");
+                    }
+                });
+            }).start();
+        }else if (quitMenu.equals(title)){
+            System.out.println("点击了提出");
+            new Thread(()->{
+                int groupId = this.longClickGroupId;
+                int childId = this.longClickChildId;
+                boolean res = groupService.quitByUserIdAndGroupId(user.getId(),combGroup.get(groupId).get(childId).getId());//进行退出分组操作的结果
+                mHandler.post(()->{
+                    if (res){//退出成功，更新视图
+                        clearData();
+                        initData();
+                        loadGroupList();
+                    }else{//退出失败
+                        ToastUtil.Toast(getContext(),"退出失败");
+                    }
+                });
+            }).start();
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    /********************************************************/
 
     /**
      * 加载群组信息
@@ -114,28 +190,25 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
             List<Group> l2 = groupService.getJoinedGroup(user.getAccount());
             mHandler.post(()->{
                 initData(l1,l2);
+                expandableListView.expandGroup(0);
+                expandableListView.expandGroup(1);
             });
         }).start();
     }
 
     private void InitView(View view){
         expandableListView= view.findViewById(R.id.expandableListView);
-
         btn_create = view.findViewById(R.id.btn_create);
         btn_search = view.findViewById(R.id.btn_search);
         btn_search.setOnClickListener(this);
         btn_create.setOnClickListener(this);
 
         allList=new ArrayList<String>();
-        list=new ArrayList<List<String>>();
-
-        list.add(new ArrayList<>());
-        list.add(new ArrayList<>());
 //        list.get(0).add("组1项1");
 //        list.get(1).add("组2项1");
         allList.add("   我发起的签到群");
         allList.add("   我加入的签到群");
-
+        registerForContextMenu(expandableListView);
     }
 
 
@@ -145,25 +218,11 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
      * @param i 群组类型，0===创建的群组；1===加入的群组
      */
     private void addGroup(Group group,int i){
-        if(isFirstLoad){
-            combGroup.add(new ArrayList<>());
-            combGroup.add(new ArrayList<>());
-            isFirstLoad = false;
-        }
+        combGroup.add(new ArrayList<>());
+        combGroup.add(new ArrayList<>());
         combGroup.get(i).add(group);//更新数据实体
         list.get(i).add(group.getName());
         madapder.notifyDataSetChanged();
-    }
-
-    /**
-     * 更新群组数据
-     * @param group
-     * @param i
-     */
-    public void updateList(Group group,int i){
-        mHandler.post(()->{
-            addGroup(group,i);
-        });
     }
 
     private void initData(List<Group> gl1,List<Group> gl2){
@@ -190,6 +249,36 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+
+    class MyExpandShortClick implements ExpandableListView.OnChildClickListener{
+
+        @Override
+        public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
+
+            Group group = combGroup.get(i).get(i1);
+            System.out.println("点击了组："+i+",此组长度为："+combGroup.get(i).size()+"，遍历如下：");
+            for (Group g:combGroup.get(i)){
+                System.out.println(g);
+            }
+
+            System.out.println("ExpandList---groupPosition:"+i+",childPosition:"+i1);
+            //System.out.println("组别："+groupPosition+",子项："+childPosition);
+            if(i==0){
+                GroupInfoActivity.startActivity(getContext(),group,user,GroupInfoActivity.CREATED_GROUP);
+            }else if(i==1){
+                GroupInfoActivity.startActivity(getContext(),group,user,GroupInfoActivity.JOINED_GROUP);
+            }
+            return true;
+        }
+    }
+
+    class MyExpandLongClickListener implements AdapterView.OnItemLongClickListener{
+
+        @Override
+        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+            return false;
+        }
+    }
 
     class Madapder extends BaseExpandableListAdapter {
 
